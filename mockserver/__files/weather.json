@@ -1,0 +1,149 @@
+{
+  "query": {
+    "count": 1,
+    "created": "2017-02-24T06:06:15Z",
+    "lang": "es",
+    "results": {
+      "channel": {
+        "units": {
+          "distance": "mi",
+          "pressure": "in",
+          "speed": "mph",
+          "temperature": "F"
+        },
+        "title": "Yahoo! Weather - Cordoba, CBA, AR",
+        "link": "http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-466861/",
+        "description": "Yahoo! Weather for Cordoba, CBA, AR",
+        "language": "en-us",
+        "lastBuildDate": "Fri, 24 Feb 2017 03:06 AM ART",
+        "ttl": "60",
+        "location": {
+          "city": "Cordoba",
+          "country": "Argentina",
+          "region": " CBA"
+        },
+        "wind": {
+          "chill": "75",
+          "direction": "315",
+          "speed": "7"
+        },
+        "atmosphere": {
+          "humidity": "90",
+          "pressure": "961.0",
+          "rising": "0",
+          "visibility": "16.1"
+        },
+        "astronomy": {
+          "sunrise": "7:3 am",
+          "sunset": "7:57 pm"
+        },
+        "image": {
+          "title": "Yahoo! Weather",
+          "width": "142",
+          "height": "18",
+          "link": "http://weather.yahoo.com",
+          "url": "http://l.yimg.com/a/i/brand/purplelogo//uh/us/news-wea.gif"
+        },
+        "item": {
+          "title": "Conditions for Cordoba, CBA, AR at 02:00 AM ART",
+          "lat": "-31.403959",
+          "long": "-64.197929",
+          "link": "http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-466861/",
+          "pubDate": "Fri, 24 Feb 2017 02:00 AM ART",
+          "condition": {
+            "code": "31",
+            "date": "Fri, 24 Feb 2017 02:00 AM ART",
+            "temp": "75",
+            "text": "Clear"
+          },
+          "forecast": [
+            {
+              "code": "4",
+              "date": "24 Feb 2017",
+              "day": "Fri",
+              "high": "90",
+              "low": "72",
+              "text": "Thunderstorms"
+            },
+            {
+              "code": "4",
+              "date": "25 Feb 2017",
+              "day": "Sat",
+              "high": "86",
+              "low": "73",
+              "text": "Thunderstorms"
+            },
+            {
+              "code": "4",
+              "date": "26 Feb 2017",
+              "day": "Sun",
+              "high": "84",
+              "low": "72",
+              "text": "Thunderstorms"
+            },
+            {
+              "code": "4",
+              "date": "27 Feb 2017",
+              "day": "Mon",
+              "high": "85",
+              "low": "70",
+              "text": "Thunderstorms"
+            },
+            {
+              "code": "32",
+              "date": "28 Feb 2017",
+              "day": "Tue",
+              "high": "88",
+              "low": "68",
+              "text": "Sunny"
+            },
+            {
+              "code": "4",
+              "date": "01 Mar 2017",
+              "day": "Wed",
+              "high": "90",
+              "low": "69",
+              "text": "Thunderstorms"
+            },
+            {
+              "code": "4",
+              "date": "02 Mar 2017",
+              "day": "Thu",
+              "high": "76",
+              "low": "69",
+              "text": "Thunderstorms"
+            },
+            {
+              "code": "4",
+              "date": "03 Mar 2017",
+              "day": "Fri",
+              "high": "79",
+              "low": "65",
+              "text": "Thunderstorms"
+            },
+            {
+              "code": "30",
+              "date": "04 Mar 2017",
+              "day": "Sat",
+              "high": "74",
+              "low": "65",
+              "text": "Partly Cloudy"
+            },
+            {
+              "code": "28",
+              "date": "05 Mar 2017",
+              "day": "Sun",
+              "high": "73",
+              "low": "64",
+              "text": "Mostly Cloudy"
+            }
+          ],
+          "description": "<![CDATA[<img src=\"http://l.yimg.com/a/i/us/we/52/31.gif\"/>\n<BR />\n<b>Current Conditions:</b>\n<BR />Clear\n<BR />\n<BR />\n<b>Forecast:</b>\n<BR /> Fri - Thunderstorms. High: 90Low: 72\n<BR /> Sat - Thunderstorms. High: 86Low: 73\n<BR /> Sun - Thunderstorms. High: 84Low: 72\n<BR /> Mon - Thunderstorms. High: 85Low: 70\n<BR /> Tue - Sunny. High: 88Low: 68\n<BR />\n<BR />\n<a href=\"http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-466861/\">Full Forecast at Yahoo! Weather</a>\n<BR />\n<BR />\n(provided by <a href=\"http://www.weather.com\" >The Weather Channel</a>)\n<BR />\n]]>",
+          "guid": {
+            "isPermaLink": "false"
+          }
+        }
+      }
+    }
+  }
+}

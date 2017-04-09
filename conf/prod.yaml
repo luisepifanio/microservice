@@ -1,0 +1,4 @@
+jetty:
+  context: /
+  connector:
+    port: 80
