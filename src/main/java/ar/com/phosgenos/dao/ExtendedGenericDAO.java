@@ -39,6 +39,11 @@ public class ExtendedGenericDAO<T extends IdentifiableEntity<PK>, PK extends Ser
         return delegate.delete(t);
     }
 
+    @Override
+    public boolean delete(PK id) {
+        return delegate.delete(id);
+    }
+
     //Extended CRUD operations
     public Collection<T> create(final Collection<T> instances){
         final Collection<T> _instances = Objects.requireNonNull(instances, "instances to create cannot be null");
@@ -97,7 +102,7 @@ public class ExtendedGenericDAO<T extends IdentifiableEntity<PK>, PK extends Ser
                 .collect(Collectors.toSet());
     }
 
-    static <C extends IdentifiableEntity<P>,P extends Serializable> ExtendedGenericDAO<C ,P> fromInstance(final IGenericDao<C,P> delegate){
+    public static <C extends IdentifiableEntity<P>,P extends Serializable> ExtendedGenericDAO<C ,P> fromInstance(final IGenericDao<C,P> delegate){
         return new ExtendedGenericDAO<>(delegate);
     }
 }

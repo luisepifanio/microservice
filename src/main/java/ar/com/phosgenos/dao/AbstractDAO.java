@@ -26,6 +26,7 @@ public abstract class AbstractDAO<T extends IdentifiableEntity<PK>, PK extends S
             log.warn("Could not figure out about persistent class");
             this.persistentClass = null;
         }
+        log.info("Class '{}' instatiated with persistent class '{}'",this.getClass(),persistentClass);
     }
 
     @Override

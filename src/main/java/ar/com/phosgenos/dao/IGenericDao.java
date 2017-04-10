@@ -10,6 +10,7 @@ public interface IGenericDao<T extends IdentifiableEntity<PK>, PK extends Serial
     T read(final PK id);
     T update(final T t);
     boolean delete(final T t);
+    boolean delete(final PK id);
 
     /*
     Collection<T> readAll();

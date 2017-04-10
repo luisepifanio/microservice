@@ -1,9 +1,11 @@
-package ar.com.phosgenos.dao.memory
+package application.services.definitions.dao
 
 import ar.com.phosgenos.dao.AbstractDAO
 import ar.com.phosgenos.entities.Category
 
 class CategoryDaoImpl extends AbstractDAO<Category,Long> {
+
+    // Never forget no args constructor
     CategoryDaoImpl() {
         super()
     }
@@ -25,6 +27,11 @@ class CategoryDaoImpl extends AbstractDAO<Category,Long> {
 
     @Override
     boolean delete(Category category) {
+        return false
+    }
+
+    @Override
+    boolean delete(Long id) {
         return false
     }
 }

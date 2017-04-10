@@ -17,14 +17,14 @@ import javax.ws.rs.core.Response
 @Produces(MediaType.APPLICATION_JSON)
 interface EntityController<PK,T extends IdentifiableEntity<PK>> {
     @POST
-    T create(final T t)
+    Response create(final T t)
     @GET
     @Path("{id}")
     Response read(@PathParam("id") final PK id)
     @PUT
     @Path("{id}")
-    T update(@PathParam("id") final T t)
+    Response update(@PathParam("id") final PK id, final T t)
     @DELETE
     @Path("{id}")
-    boolean delete(@PathParam("id")  final T t)
+    Response delete(@PathParam("id") final PK id)
 }

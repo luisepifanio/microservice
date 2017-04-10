@@ -17,10 +17,9 @@ import java.util.Collection;
 public class ServiceStatus implements Serializable {
 
     String error;
-    @XmlElement(nillable = true)
     String message;
-    int status;
-    @XmlElement(nillable = true)
+    @XmlElement(required = true)
+    Integer status;
     Collection<ErrorDetail> causes;
 
     ServiceStatus.ServiceStatusBuilder asBuilder(){

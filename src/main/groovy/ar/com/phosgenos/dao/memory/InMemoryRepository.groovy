@@ -32,7 +32,7 @@ class InMemoryRepository {
             Category.builder()
                 .id( it.id as Long )
                 .name(  it.name as String )
-                .modified(modified​)
+                .modified( modified )
             .build()
         }
     }

@@ -6,7 +6,9 @@ public enum ErrorCatalog {
 
     UNKNOWN(HttpStatus.INTERNAL_SERVER_ERROR_500, ErrorCodes.UNKWON),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR_500, ErrorCodes.INTERNAL_ERROR),
-    VALIDATION_FAILED(HttpStatus.BAD_REQUEST_400,ErrorCodes.VALIDATION_ERROR);
+    VALIDATION_FAILED(HttpStatus.BAD_REQUEST_400,ErrorCodes.VALIDATION_ERROR),
+    NOT_FOUND(HttpStatus.NOT_FOUND_404,ErrorCodes.NOT_FOUND)
+    ;
 
     public final int status;
     public final String defaultMessage;

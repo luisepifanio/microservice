@@ -9,6 +9,7 @@ import com.google.inject.Inject
 import io.bootique.annotation.Args
 import io.swagger.annotations.Api
 
+import javax.ws.rs.Consumes
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
@@ -17,6 +18,8 @@ import javax.ws.rs.core.Response
 
 @Api(value = "hello", description = "Simples hello response")
 @Path("/")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 class HelloResource {
 
     @Inject
@@ -33,21 +36,26 @@ class HelloResource {
     @GET
     @Path("ok")
     Response ok() {
-        JSONResponseBuilder<Category> builder = JSONResponseBuilder.builder()
-                .data(new Category(id: 1, name: 'Demo Category', modified: new Date()))
+        JSONResponseBuilder<Category> builder = JSONResponseBuilder.builder();
+        Response response = builder.data(new Category(id: 1, name: 'Demo Category', modified: new Date()))
                 .build()
+
+        return response
     }
 
     @GET
     @Path("error")
     Response error() {
-        JSONResponseBuilder<Category> builder = JSONResponseBuilder.builder()
-                .exception(ApplicationException.builder()
+        Response response = JSONResponseBuilder.builder()
+                .exception(
+                ApplicationException.builder()
                         .catalogEntry(ErrorCatalog.VALIDATION_FAILED)
                         .causes([
                             ErrorDetail.builder().code('demo_error').message('Please correct the query').build()
-                        ]).build())
+                        ]).build()
+                )
                 .build()
+        return response
     }
 
     @GET
