@@ -11,8 +11,6 @@ import org.sqlite.javax.SQLiteConnectionPoolDataSource
 
 import javax.sql.DataSource
 
-import static com.diogonunes.jcdp.color.api.Ansi.*
-
 enum DataSourceFactory {
 
     INSTANCE
