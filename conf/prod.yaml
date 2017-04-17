@@ -2,3 +2,10 @@ jetty:
   context: /
   connector:
     port: 80
+jdbc:
+  appds:
+    url: "jdbc:h2:file:./db/beer.h2"
+    driverClassName: org.h2.Driver
+    jmxEnabled: true
+    jmxObjectName: appds
+    initialSize: 2

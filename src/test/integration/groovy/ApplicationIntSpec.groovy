@@ -6,8 +6,7 @@
  */
 
 import spock.lang.Specification
-import spock.lang.Ignore
-import ar.com.phosgenos.Application
+import application.Application
 
 class ApplicationIntSpec extends Specification{
 

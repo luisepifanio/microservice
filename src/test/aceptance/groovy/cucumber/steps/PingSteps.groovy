@@ -30,7 +30,7 @@ When(~/^'(.+)' endpoint is invoked using (.+) method$/) { String path, String ht
     println("httpMethod => $httpMethod")
 }
 
-Then(~/^mockserver responds with '(.+)'$/) { String responseBody ->
+Then(~/^mockserver responds catching '(.+)'$/) { String responseBody ->
     // Write code here that turns the phrase above into concrete actions
     println("responseBody => $responseBody")
 }

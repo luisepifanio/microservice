@@ -29,3 +29,5 @@ target/
 .gradle/
 logs/
 build/
+.vscode/
+bin/
