@@ -1,10 +1,11 @@
-package ar.com.phosgenos
+package application.controllers.impl
 
 import ar.com.phosgenos.dto.ErrorDetail
 import ar.com.phosgenos.dto.response.json.JSONResponseBuilder
 import ar.com.phosgenos.entities.Category
 import ar.com.phosgenos.exception.ApplicationException
 import ar.com.phosgenos.exception.ErrorCatalog
+import ar.com.phosgenos.rest.Controller
 import com.google.inject.Inject
 import io.bootique.annotation.Args
 import io.swagger.annotations.Api
@@ -20,7 +21,7 @@ import javax.ws.rs.core.Response
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-class HelloResource {
+class HelloController implements Controller {
 
     @Inject
     @Args

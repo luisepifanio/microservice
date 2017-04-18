@@ -45,7 +45,7 @@ plugins {
 }
 
 // Tell Boutique where to begin
-mainClassName = "ar.com.phosgenos.Application"
+mainClassName = "application.Application"
 group "ar.com.phosgenos.bootique.demo"
 version "0.1"
 
@@ -93,18 +93,20 @@ dependencies {
     compileOnly "org.projectlombok:lombok:1.16.14"
 
     //Bootique
-    compile 'io.bootique:bootique:0.20'
-    compile 'io.bootique.logback:bootique-logback:0.12'
-    compile 'io.bootique.jetty:bootique-jetty:0.18'
-    compile 'io.bootique.jersey:bootique-jersey:0.19'
+    compile 'io.bootique:bootique:0.22'
+    compile 'io.bootique.logback:bootique-logback:0.14'
+    compile 'io.bootique.jersey:bootique-jersey:0.21'
+
     //Bootique swagger integration,have to annotate yur classes to document
     compile 'io.bootique.swagger:bootique-swagger:0.3'
     // Can we have a decent json mapper
     compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.25.1'
-    //SQLLite
-    compile'org.xerial:sqlite-jdbc:3.16.1'
+    //Database
+    compile 'com.h2database:h2:1.4.194'
+    // Database integration
+    compile 'io.bootique.jdbc:bootique-jdbc:0.14'
     //MyBatis
-    compile 'org.mybatis:mybatis:3.4.4'
+    // compile 'org.mybatis:mybatis:3.4.4'
 
     // External http client
     // compile 'com.squareup.okhttp3:okhttp:3.6.0'
@@ -325,6 +327,7 @@ task appstructure {
         def directories = [
                 OPT_DIR,
                 "$OPT_DIR/libs",
+                "$OPT_DIR/db",
                 OPT_CONF
         ]
         directories.each { new File(it).mkdirs() }
@@ -341,8 +344,13 @@ task copyconfiguration(type: Copy) {
     into "$OPT_CONF"
 }
 
+task copydatabase(type: Copy) {
+    from "${rootDir}/src/main/resources/db/beerdb2.h2.mv.db"
+    into "$OPT_DIR/db"
+}
+
 task distribute {
-    dependsOn 'shadowJar', 'appstructure','copyconfiguration', 'copypackedapp'
+    dependsOn 'shadowJar', 'appstructure','copyconfiguration','copydatabase', 'copypackedapp'
 }
 
 task startapp_test(type: ExecWait) {

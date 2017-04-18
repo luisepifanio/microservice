@@ -28,5 +28,6 @@ target/
 # Gradle
 .gradle/
 logs/
-build/
-.vscode
+build/  #Others
+.vscode/
+bin/

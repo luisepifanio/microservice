@@ -1,4 +1,14 @@
 jetty:
   context: /
-  connector:
-    port: 8080
+  connectors:
+    - port: 8080
+    - port: 8443
+jdbc:
+  appds:
+    url: "jdbc:h2:file:./db/beerdb2.h2.mv.db"
+    username:
+    password:
+    driverClassName: org.h2.Driver
+    jmxEnabled: true
+    jmxObjectName: appds
+    initialSize: 2
