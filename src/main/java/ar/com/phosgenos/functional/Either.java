@@ -15,9 +15,9 @@ public class Either<A, B> {
 
         // Defensive assumptions
         if (expected != null && alternative != null) {
-            throw new IllegalStateException("Both values cannot be null");
-        } else if (expected == null && alternative == null) {
             throw new IllegalStateException("Both values cannot be set");
+        } else if (expected == null && alternative == null) {
+            throw new IllegalStateException("Both values cannot be null");
         }
     }
 

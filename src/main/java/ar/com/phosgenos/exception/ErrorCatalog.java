@@ -4,9 +4,10 @@ import org.eclipse.jetty.http.HttpStatus;
 
 public enum ErrorCatalog {
 
-    UNKNOWN(HttpStatus.INTERNAL_SERVER_ERROR_500, ErrorCodes.UNKWON),
+    UNKNOWN(HttpStatus.INTERNAL_SERVER_ERROR_500, ErrorCodes.UNKNOWN),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR_500, ErrorCodes.INTERNAL_ERROR),
     VALIDATION_FAILED(HttpStatus.BAD_REQUEST_400,ErrorCodes.VALIDATION_ERROR),
+    OPERATION_FAILED(HttpStatus.BAD_REQUEST_400,ErrorCodes.OPERATION_FAILED),
     NOT_FOUND(HttpStatus.NOT_FOUND_404,ErrorCodes.NOT_FOUND)
     ;
 

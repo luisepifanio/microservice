@@ -68,10 +68,6 @@ class CategoryServiceImpl implements CategoryService {
 
     @Override
     Either<Boolean,ApplicationException> remove(Long identifier) {
-        Category category = getCategoryDao().read(identifier)
-        if (!category) {
-            return Either.expected(Boolean.FALSE)
-        }
         Try.catching(ApplicationException) {
             getCategoryDao().delete(identifier)
         }

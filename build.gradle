@@ -10,7 +10,7 @@ buildscript {
 
     repositories {
         mavenCentral()
-        jcenter()
+        // jcenter()
     }
 
     dependencies {
@@ -101,6 +101,8 @@ dependencies {
     compile 'io.bootique.swagger:bootique-swagger:0.3'
     // Can we have a decent json mapper
     compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.25.1'
+    //compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.8'
+
     //Database
     compile 'com.h2database:h2:1.4.194'
     // Database integration

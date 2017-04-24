@@ -1,6 +1,7 @@
 package application
 
 import application.controllers.Controllers
+import application.ext.CustomObjectMapperProvider
 import application.services.ServicesModule
 import com.google.inject.Binder
 import com.google.inject.Module
@@ -16,6 +17,7 @@ import io.bootique.BQCoreModule;
 import io.bootique.Bootique
 import io.bootique.jdbc.TomcatDataSourceFactory
 import io.bootique.jersey.JerseyModule
+import io.bootique.jersey.JerseyModuleExtender
 
 class Application implements Module {
     static void main(String[] args) {
@@ -32,11 +34,15 @@ class Application implements Module {
 
         modules.each { it.newInstance().configure(binder) }
 
-        //Jetty Controllers definitions
-        Multibinder<Object> multiBinder = JerseyModule.contributeResources(binder)
-        Controllers.get().each {
-            multiBinder.addBinding().to(it)
-        }
+        // Jetty Controllers definitions
+        // Multibinder<Object> multiBinder = JerseyModule.extend(binder)
+        // Controllers.get().each {
+        //     multiBinder.addBinding().to(it)
+        // }
+
+        JerseyModuleExtender extender = JerseyModule.extend(binder)
+        Controllers.get().each { extender.addResource(it) }
+        extender.addResource(CustomObjectMapperProvider)
 
         //Sensitive configuration binding
         BQCoreModule.extend(binder)

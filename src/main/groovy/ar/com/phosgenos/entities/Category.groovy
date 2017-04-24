@@ -1,11 +1,26 @@
 package ar.com.phosgenos.entities
 
 import ar.com.phosgenos.dao.IdentifiableEntity
+import ar.com.phosgenos.util.Mappable
 import groovy.transform.builder.Builder
+import lombok.EqualsAndHashCode
+import lombok.ToString
+
+import javax.xml.bind.annotation.XmlRootElement
 
 @Builder
-class Category implements IdentifiableEntity<Long> {
+@EqualsAndHashCode(of = ['id'])
+@ToString
+@XmlRootElement
+class Category implements IdentifiableEntity<Long>, Mappable {
     Long id
     String name
     Date modified
+
+    def asBuilder() {
+        builder()
+                .id(id)
+                .name(name)
+                .modified(modified)
+    }
 }

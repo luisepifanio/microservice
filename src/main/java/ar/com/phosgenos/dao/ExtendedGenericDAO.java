@@ -45,7 +45,7 @@ public class ExtendedGenericDAO<T extends IdentifiableEntity<PK>, PK extends Ser
     }
 
     //Extended CRUD operations
-    public Collection<T> create(final Collection<T> instances){
+    public Collection<T> createAll(final Collection<T> instances){
         final Collection<T> _instances = Objects.requireNonNull(instances, "instances to create cannot be null");
         return new HashSet<T>(_instances)
                 .parallelStream()
@@ -54,7 +54,7 @@ public class ExtendedGenericDAO<T extends IdentifiableEntity<PK>, PK extends Ser
                 .collect(Collectors.toSet());
     }
 
-    public Collection<T> read(final Collection<PK> ids) {
+    public Collection<T> readAll(final Collection<PK> ids) {
         final Collection<PK> _ids = Objects.requireNonNull(ids, "instances ids to read cannot be null");
         return new HashSet<>(_ids)
                 .parallelStream()
@@ -63,7 +63,7 @@ public class ExtendedGenericDAO<T extends IdentifiableEntity<PK>, PK extends Ser
                 .collect(Collectors.toSet());
     }
 
-    public Collection<T> update(final Collection<T> instances) {
+    public Collection<T> updateAll(final Collection<T> instances) {
         final Collection<T> _instances = Objects.requireNonNull(instances, "instances to update cannot be null");
         return new HashSet<>(_instances)
                 .parallelStream()
@@ -72,7 +72,7 @@ public class ExtendedGenericDAO<T extends IdentifiableEntity<PK>, PK extends Ser
                 .collect(Collectors.toSet());
     }
 
-    public int delete(final Collection<T> instances) {
+    public int deleteAll(final Collection<T> instances) {
         final Collection<T> _instances = Objects.requireNonNull(instances, "instances to delete cannot be null");
         return new HashSet<>(_instances)
                 .parallelStream()
@@ -85,7 +85,7 @@ public class ExtendedGenericDAO<T extends IdentifiableEntity<PK>, PK extends Ser
 
     public boolean exists(T t) {
         final T _instance = Objects.requireNonNull(t, "instance to check existence cannot be null");
-        return  exists(t.getId());
+        return  exists(_instance.getId());
     }
 
     public boolean exists(PK id) {

@@ -13,16 +13,20 @@ import com.google.inject.Inject
 import groovy.util.logging.Slf4j
 import org.eclipse.jetty.http.HttpStatus
 
+import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
+import javax.ws.rs.Produces
+import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Slf4j
 @Path('categories')
+@Produces(MediaType.APPLICATION_JSON)
 class CategoryController implements EntityController<Long, Category> {
 
     public static final PATH = 'categories'
@@ -30,10 +34,12 @@ class CategoryController implements EntityController<Long, Category> {
     @Inject
     CategoryService categoryService
 
-    @POST
+    @POST @Consumes(MediaType.APPLICATION_JSON)
     @Override
-    Response create(Category category) {
+    Response create(final Category _category) {
+        Category category = Objects.requireNonNull(_category, 'category should be provided')
 
+        log.debug("[request:${category}]")
         Either<Category, ApplicationException> choice = categoryService.create(category)
 
         ChoiceHandler.on(choice)
@@ -65,10 +71,13 @@ class CategoryController implements EntityController<Long, Category> {
 
     }
 
-    @PUT
+    @PUT @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
     @Override
-    Response update(@PathParam("id") Long id, Category category) {
+    Response update(@PathParam("id") Long id, Category _category) {
+
+        Category category = Objects.requireNonNull(_category, 'category should be provided')
+        log.debug("[request:${category}]")
 
         Category local = Category.builder()
             .id(id)
@@ -99,10 +108,10 @@ class CategoryController implements EntityController<Long, Category> {
                     return Response.status(HttpStatus.NO_CONTENT_204).build()
                 }
                 Exception th = new ApplicationException(
-                        "Resource $id was found",
+                        "Resource $id was NOT found",
                         null,
-                        ErrorCatalog.VALIDATION_FAILED,
-                        [ErrorDetail.builder().code('not_found').message("Resource $id was found").build()]
+                        ErrorCatalog.NOT_FOUND,
+                        [ErrorDetail.builder().code('not_found').message("Resource $id was NOT found").build()]
                 )
                 return JSONResponse.builder().exception(th).build()
             }.onAlternative { ApplicationException exc ->
