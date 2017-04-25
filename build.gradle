@@ -113,6 +113,11 @@ dependencies {
     // External http client
     // compile 'com.squareup.okhttp3:okhttp:3.6.0'
 
+    // Experimental FIQL please remove trashy dependencies
+    compile 'org.apache.cxf:cxf-rt-rs-extension-search:3.1.11'
+
+
+
     ////////// TESTING RELATED
     // We use the latest groovy 2.x version for Spock testing
     compile 'org.codehaus.groovy:groovy-all:2.4.7'

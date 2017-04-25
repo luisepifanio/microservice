@@ -37,9 +37,10 @@ class CategoryDaoImpl extends AbstractDAO<Category, Long> {
         chooseYourDestiny << [{ int rowsUpdated -> rowsUpdated == 1 }: { ->
             int id = generatedKeys.first().find { it.key in ['SCOPE_IDENTITY()'] }.value
 
-            return category.asBuilder()
-                    .id(id as Long)
-                    .build() // Not the same object
+            // return category.asBuilder()
+            //         .id(id as Long)
+            //         .build() // Not the same object
+            return read(id)
         }]
         chooseYourDestiny << [{ int rowsUpdated -> true }: { ->
             throw ApplicationException.builder()
@@ -87,7 +88,7 @@ class CategoryDaoImpl extends AbstractDAO<Category, Long> {
     }
 
     @Override
-    Category update(Category category) {
+    Category update(final Category category) {
         Sql sql = Sql.newInstance(dataSource)
 
         // Groovy's Sql seems not to support named parameters
@@ -102,7 +103,8 @@ class CategoryDaoImpl extends AbstractDAO<Category, Long> {
         //One of next conditions should be always true
         Map<Closure<Boolean>, Closure<Category>> chooseYourDestiny = [:]
         chooseYourDestiny << [{ int rowsUpdated -> rowsUpdated == 1 }: { ->
-            return category
+            // return category
+            return read(category.id)
         }]
         chooseYourDestiny << [{ int rowsUpdated -> rowsUpdated < 1 }: { ->
             throw ApplicationException.builder()

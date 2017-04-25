@@ -11,11 +11,21 @@ import javax.xml.bind.annotation.XmlRootElement
 @Builder
 @EqualsAndHashCode(of = ['id'])
 @ToString
-@XmlRootElement
+// @XmlRootElement
 class Category implements IdentifiableEntity<Long>, Mappable {
+
     Long id
     String name
     Date modified
+
+    @Override
+    Long getId() {
+        return id
+    }
+
+    void setId(Long id) {
+        this.id = id
+    }
 
     def asBuilder() {
         builder()
