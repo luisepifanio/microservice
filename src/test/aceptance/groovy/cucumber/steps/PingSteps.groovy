@@ -3,9 +3,7 @@ package cucumber.steps
 import cucumber.api.groovy.EN
 import cucumber.api.groovy.Hooks
 
-import static cucumber.api.groovy.EN.Given
-import static cucumber.api.groovy.EN.Then
-import static cucumber.api.groovy.EN.When
+import static cucumber.api.groovy.EN.*
 
 this.metaClass.mixin(Hooks)
 this.metaClass.mixin(EN)
@@ -30,7 +28,7 @@ When(~/^'(.+)' endpoint is invoked using (.+) method$/) { String path, String ht
     println("httpMethod => $httpMethod")
 }
 
-Then(~/^mockserver responds catching '(.+)'$/) { String responseBody ->
+Then(~/^mockserver responded with '(.+)'$/) { String responseBody ->
     // Write code here that turns the phrase above into concrete actions
     println("responseBody => $responseBody")
 }
