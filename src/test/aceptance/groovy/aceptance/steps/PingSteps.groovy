@@ -1,4 +1,4 @@
-package cucumber.steps
+package aceptance.steps
 
 import cucumber.api.groovy.EN
 import cucumber.api.groovy.Hooks

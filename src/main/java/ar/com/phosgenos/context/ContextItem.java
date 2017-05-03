@@ -10,6 +10,9 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = {"id"})
 @ToString
 public class ContextItem<T> implements Serializable {
+
+    private static final long serialVersionUID = -7375267433724473083L;
+
     @Getter
     final Serializable id;
     @Getter
@@ -20,7 +23,7 @@ public class ContextItem<T> implements Serializable {
         this.data = data;
     }
 
-    public static <C> ContextItemBuilder<C> builder() {
+    public static <C extends Serializable> ContextItemBuilder<C> builder() {
         return new ContextItemBuilder<>();
     }
 
@@ -40,7 +43,7 @@ public class ContextItem<T> implements Serializable {
         }
 
         ContextItem<R> build() {
-            return new ContextItem<>(id, data);
+            return new ContextItem<>(this.id, this.data);
         }
     }
 }

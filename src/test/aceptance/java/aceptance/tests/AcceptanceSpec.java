@@ -1,14 +1,15 @@
+package aceptance.tests;
+
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 
 @RunWith(Cucumber.class)
-
 @CucumberOptions(
     strict = true
     , monochrome = false
-    , glue = {"classpath:cucumber.steps"}
+    , glue = {"classpath:aceptance.steps"}
     // ,tags={"~@manual", "~@review", "~@pending"}
     , format = {
             "pretty",
@@ -17,7 +18,7 @@ import org.junit.runner.RunWith;
     }
     , features = "classpath:features/"
 )
-public class CucumberTest {
+public class AcceptanceSpec {
 
 }
 

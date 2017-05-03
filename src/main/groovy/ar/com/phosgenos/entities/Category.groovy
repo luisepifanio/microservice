@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement
 @Builder
 @EqualsAndHashCode(of = ['id'])
 @ToString
-// @XmlRootElement
 class Category implements IdentifiableEntity<Long>, Mappable {
 
     Long id

@@ -1,6 +1,7 @@
 package ar.com.phosgenos.context
 
 import groovy.util.logging.Slf4j
+import org.apache.commons.lang3.SerializationUtils
 
 @Slf4j
 class ExecutionContext {
@@ -13,10 +14,36 @@ class ExecutionContext {
         protected ExecutionContext initialValue() {
             return new ExecutionContext()
         }
+
+        @Override
+        protected ExecutionContext childValue(ExecutionContext executionContext) {
+
+            Map<Serializable, ContextItem> repoCopy = executionContext.context.repository.collectEntries {
+                final Serializable key, final ContextItem value ->
+                    final Serializable newKey = SerializationUtils.clone(key)
+                    ContextItem item = new ContextItem(SerializationUtils.clone(key), (value instanceof Serializable) ? SerializationUtils.clone(value) : value)
+                    [(newKey): item]
+            }
+
+            ExecutionContext childContext = new ExecutionContext(new Context(repoCopy))
+            return super.childValue(childContext)
+        }
+    }
+
+    private ExecutionContext(final Context _context) {
+        this.context = _context ?: new Context()
     }
 
     private ExecutionContext() {
-        this.context = new Context()
+        this(new Context())
+    }
+
+    private ExecutionContext(ExecutionContext original) {
+        if (!original) {
+            this.context = new Context()
+        } else {
+            this.context = new Context(original.context)
+        }
     }
 
     static ExecutionContext getCurrentContext() {
@@ -32,7 +59,7 @@ class ExecutionContext {
     }
 
     static <T> T readOnWrite(final String key, final T payload) {
-        getCurrentContext().context.getContextValue(key,payload)
+        getCurrentContext().context.getContextValue(key, payload)
     }
 
     static <T> T get(final String key) {

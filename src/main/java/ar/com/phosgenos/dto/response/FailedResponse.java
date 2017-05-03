@@ -7,6 +7,8 @@ import java.util.Objects;
 @Data
 public class FailedResponse implements ResponseCapable {
 
+    private static final long serialVersionUID = 6873633717199976133L;
+
     final Exception exception;
 
     public FailedResponse(Exception _exception){

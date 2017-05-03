@@ -1,11 +1,11 @@
 package ar.com.phosgenos.context;
 
-import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
+import java.util.*;
+
+@Slf4j
 public class Context {
 
     final Map<Serializable, ContextItem> repository;
@@ -14,42 +14,56 @@ public class Context {
         this(new LinkedHashMap<>());
     }
 
-    public Context(final Map<Serializable, ContextItem> repository) {
-        this.repository = repository;
+    public Context(final Map<Serializable, ContextItem> _repository) {
+        this.repository = new LinkedHashMap<>(
+                Objects.requireNonNull(_repository, "Context should be initialized with non null Map")
+        );
     }
 
     public Context(final Context toCopy) {
         this();
-        this.repository.putAll(toCopy.repository);
+        extend(toCopy);
     }
 
+    @SuppressWarnings("unchecked")
     public <V> ContextItem<V> get(final Serializable key) {
         return (ContextItem<V>) repository.get(key);
     }
 
+    @SuppressWarnings("unchecked")
     public <V> ContextItem<V> put(final ContextItem<V> contextItem) {
         Objects.requireNonNull(contextItem);
         Objects.requireNonNull(contextItem.getData());
-        return repository.put(contextItem.getId(),contextItem);
+        return repository.put(contextItem.getId(), contextItem);
     }
 
     public <V> V putContextValue(final Serializable key, final V value) {
-        return put(asContextItem(key,value)).getData();
+        return put(asContextItem(key, value)).getData();
     }
 
     public <V> V getContextValue(final Serializable key) {
-        ContextItem<V> value = repository.get(key);
+        ContextItem<V> value = get(key);
         return (value == null) ? null : value.getData();
     }
 
     public <V> V removeContextValue(final Serializable key) {
-        return (V) repository.remove(key).getData();
+        if (repository.containsKey(key)) {
+            ContextItem value = repository.remove(key);
+            try {
+                return (V) value.getData();
+            } catch (ClassCastException e) {
+                log.warn("Could not cast your Object as desired but key was removed");
+            }
+        }
+        log.warn("Key has not been found");
+        return null;
+
     }
 
     public <V> V getContextValue(final Serializable key, final V defaultValue) {
         Optional<V> val = Optional.ofNullable(getContextValue(key));
 
-        return val.orElseGet( () -> put(asContextItem(key, defaultValue)).getData() );
+        return val.orElseGet(() -> put(asContextItem(key, defaultValue)).getData());
     }
 
     public Context extend(Context toCopy) {
@@ -57,10 +71,15 @@ public class Context {
         return this;
     }
 
+    public Context extendACopy(Context toCopy) {
+        Context copy = new Context(toCopy != null ? toCopy.repository : new HashMap<>());
+        return copy.extend(toCopy);
+    }
+
     private <V> ContextItem<V> asContextItem(Serializable key, V defaultValue) {
         return new ContextItem.ContextItemBuilder<V>()
-                    .id(key)
-                    .data(defaultValue)
-                    .build();
+                .id(key)
+                .data(defaultValue)
+                .build();
     }
 }

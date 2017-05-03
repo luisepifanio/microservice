@@ -7,6 +7,8 @@ import java.util.Objects;
 @Data
 public class Response<T> implements ResponseCapable {
 
+    private static final long serialVersionUID = -5758226446037751172L;
+
     T data;
 
     public Response() { }

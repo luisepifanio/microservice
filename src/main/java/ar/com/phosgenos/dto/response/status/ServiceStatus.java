@@ -13,8 +13,9 @@ import java.util.Collection;
 @Data
 @Builder
 @EqualsAndHashCode
-@XmlRootElement
 public class ServiceStatus implements Serializable {
+
+    private static final long serialVersionUID = -934999524951963392L;
 
     String error;
     String message;

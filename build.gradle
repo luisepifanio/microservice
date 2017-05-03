@@ -323,8 +323,10 @@ task aceptance(type: Test, group: 'verification', description: 'Runs all aceptan
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.aceptanceRuntime + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'src/test/aceptance/groovy', 'src/test/aceptance/resources/features']
-
+            args = [
+                '--glue', 'src/test/aceptance/groovy',
+                'src/test/aceptance/resources/features'
+            ]
         }
     }
 }
