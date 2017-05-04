@@ -6,7 +6,7 @@ import org.apache.commons.lang3.SerializationUtils
 @Slf4j
 class ExecutionContext {
 
-    final Context context
+    protected final Context context
 
     private static
     final InheritableThreadLocal<ExecutionContext> sharedContext = new InheritableThreadLocal<ExecutionContext>() {
@@ -26,7 +26,7 @@ class ExecutionContext {
             }
 
             ExecutionContext childContext = new ExecutionContext(new Context(repoCopy))
-            return super.childValue(childContext)
+            return childContext
         }
     }
 
@@ -52,6 +52,10 @@ class ExecutionContext {
             sharedContext.set(new ExecutionContext())
         }
         return sharedContext.get()
+    }
+
+    static void finalize() {
+        sharedContext.remove()
     }
 
     static <T> T put(final String key, final T payload) {
@@ -86,7 +90,6 @@ class ExecutionContext {
 
     static void cleanup() {
         log.info 'Clearing ExecutionContext!'
-        getCurrentContext().contextStorage.clear()
         sharedContext.remove()
     }
 

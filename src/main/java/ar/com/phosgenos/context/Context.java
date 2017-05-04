@@ -25,6 +25,10 @@ public class Context {
         extend(toCopy);
     }
 
+    public void clear() {
+        repository.clear();
+    }
+
     @SuppressWarnings("unchecked")
     public <V> ContextItem<V> get(final Serializable key) {
         return (ContextItem<V>) repository.get(key);
@@ -34,11 +38,14 @@ public class Context {
     public <V> ContextItem<V> put(final ContextItem<V> contextItem) {
         Objects.requireNonNull(contextItem);
         Objects.requireNonNull(contextItem.getData());
-        return repository.put(contextItem.getId(), contextItem);
+        repository.put(contextItem.getId(), contextItem);
+        return contextItem;
+
     }
 
     public <V> V putContextValue(final Serializable key, final V value) {
-        return put(asContextItem(key, value)).getData();
+        ContextItem<V> item = put(asContextItem(key, value));
+        return item.getData();
     }
 
     public <V> V getContextValue(final Serializable key) {
