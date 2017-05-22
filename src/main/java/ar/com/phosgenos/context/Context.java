@@ -1,5 +1,6 @@
 package ar.com.phosgenos.context;
 
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
@@ -38,13 +39,16 @@ public class Context {
     public <V> ContextItem<V> put(final ContextItem<V> contextItem) {
         Objects.requireNonNull(contextItem);
         Objects.requireNonNull(contextItem.getData());
+        Preconditions.checkState(contextItem.getId() != null, "Context item should have an id");
         repository.put(contextItem.getId(), contextItem);
+
         return contextItem;
 
     }
 
     public <V> V putContextValue(final Serializable key, final V value) {
-        ContextItem<V> item = put(asContextItem(key, value));
+        ContextItem<V> _item = asContextItem(key, value);
+        ContextItem<V> item = put(_item);
         return item.getData();
     }
 

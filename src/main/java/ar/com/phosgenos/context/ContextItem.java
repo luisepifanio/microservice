@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "data"})
 @ToString
 public class ContextItem<T> implements Serializable {
 

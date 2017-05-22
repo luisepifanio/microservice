@@ -10,21 +10,20 @@ class ExecutionContextSpec extends Specification {
 
     static final UUID_KEY = 'uuid_key'
 
-    class Worker implements Runnable {
+    class FirstLevelWorker implements Runnable {
         private final String name
         private final CountDownLatch latch
 
-        Worker(String _name, CountDownLatch _latch) {
+        FirstLevelWorker(String _name, CountDownLatch _latch) {
             this.name = _name
             this.latch = _latch
         }
 
         @Override
         void run() {
-            println([Thread.currentThread().name, Thread.currentThread().id, name].join('##'))
             ExecutionContext.put(UUID_KEY, UUID.randomUUID().toString())
-            println(name + " after start - " + ExecutionContext.currentContext.get(UUID_KEY))
-            SubWorker subWorker = new SubWorker("sub" + name)
+            println(name + 'has id' + ExecutionContext.currentContext.get(UUID_KEY))
+            SecondLevelWorker subWorker = new SecondLevelWorker("sub" + name, ExecutionContext.get(UUID_KEY) as String)
             Thread subWorkerThread = new Thread(subWorker)
             subWorkerThread.start()
             try {
@@ -33,21 +32,22 @@ class ExecutionContextSpec extends Specification {
                 Thread.currentThread().interrupt()
             }
             ExecutionContext.currentContext.finalize()
-            println(name + " after end - " + ExecutionContext.currentContext.get(UUID_KEY))
             latch.countDown()
         }
     }
 
-    class SubWorker implements Runnable {
+    class SecondLevelWorker implements Runnable {
         private final String name
+        private final String parentuuid
 
-        SubWorker(String name) {
-            this.name = name;
+        SecondLevelWorker(String name, String parentuuid) {
+            this.name = name
+            this.parentuuid = parentuuid
         }
 
         @Override
         void run() {
-            println(name + " - " + ExecutionContext.get(UUID_KEY))
+            assert parentuuid == ExecutionContext.get(UUID_KEY)
         }
     }
 
@@ -58,17 +58,16 @@ class ExecutionContextSpec extends Specification {
         ExecutorService taskExecutor = Executors.newFixedThreadPool(4)
 
         when:
-        names.each { taskExecutor.execute(new Worker(it, latch)) }
+        names.each { taskExecutor.execute(new FirstLevelWorker(it, latch)) }
 
         try {
-            latch.await();
+            latch.await()
         } catch (InterruptedException e) {
             // handle
         }
 
-
         then:
-        true
+        noExceptionThrown()
 
     }
 }
