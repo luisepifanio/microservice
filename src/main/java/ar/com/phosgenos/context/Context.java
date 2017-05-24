@@ -52,11 +52,6 @@ public class Context {
         return item.getData();
     }
 
-    public <V> V getContextValue(final Serializable key) {
-        ContextItem<V> value = get(key);
-        return (value == null) ? null : value.getData();
-    }
-
     public <V> V removeContextValue(final Serializable key) {
         if (repository.containsKey(key)) {
             ContextItem value = repository.remove(key);
@@ -69,6 +64,11 @@ public class Context {
         log.warn("Key has not been found");
         return null;
 
+    }
+
+    public <V> V getContextValue(final Serializable key) {
+        ContextItem<V> value = get(key);
+        return (value == null) ? null : value.getData();
     }
 
     public <V> V getContextValue(final Serializable key, final V defaultValue) {

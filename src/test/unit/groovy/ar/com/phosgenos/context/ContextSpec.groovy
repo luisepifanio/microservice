@@ -127,7 +127,38 @@ class ContextSpec extends Specification {
 
     }
 
-    def "GetContextValue simple"() {
+    def "GetContextValue no readOnWrite "() {
+
+        expect: 'Automatic type coherce'
+        'value' == context.getContextValue('key')
+
+        and:
+        when: 'Invoked from other context'
+        Node<String> resultAsNode = context.getContextValue('node')
+
+        then:
+        null != resultAsNode
+
+        and: 'no cast needed '
+        when:
+        BigInteger resultAsBI = context.getContextValue(1)
+
+        then:
+        null != resultAsBI
+        2G == resultAsBI
+
+        and:
+        expect: 'Wrong usage implies ClassCastException'
+        GroovyAssert.shouldFail ClassCastException, {
+            UUID uuid = context.getContextValue('key')
+        }
+
+        and: 'null check'
+        when:
+        BigDecimal nullExpected = context.getContextValue('GE' + Math.random())
+
+        then:
+        null == nullExpected
 
     }
 
