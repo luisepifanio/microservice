@@ -163,7 +163,12 @@ class ContextSpec extends Specification {
     }
 
     def "RemoveContextValue"() {
+        expect: 'Automatic type coherce'
+        List<Serializable> keys = context.keys().asList()
 
+        while(keys){
+            Serializable key = keys.pop()
+        }
     }
 
     def "GetContextValue1"() {

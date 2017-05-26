@@ -93,4 +93,12 @@ public class Context {
                 .data(defaultValue)
                 .build();
     }
+
+    public Collection<Serializable> keys() {
+        return new HashSet<>(repository.keySet());
+    }
+
+    public int size() {
+        return repository.size();
+    }
 }
