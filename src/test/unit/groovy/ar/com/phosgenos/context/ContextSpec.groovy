@@ -7,10 +7,11 @@ import spock.lang.Unroll
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.core.IsNull.notNullValue
 import static org.junit.Assert.assertThat
+import static ar.com.phosgenos.context.Context.asContextItem
 
 class ContextSpec extends Specification {
 
-    Context context
+    Context contextUnit
     Node<String> node
 
     void setup() {
@@ -22,9 +23,9 @@ class ContextSpec extends Specification {
         model.put(1, 2G)
 
         and: 'setup unit'
-        context = new Context()
+        contextUnit = new Context()
         model.each { key, value ->
-            context.putContextValue(key, value)
+            contextUnit.putContextValue(key, value)
         }
     }
 
@@ -32,14 +33,14 @@ class ContextSpec extends Specification {
         setup:
 
         when:
-        context.clear()
+        contextUnit.clear()
 
         then:
         // For this cases is difficult
-        assertThat(context.repository, is(notNullValue()))
+        assertThat(contextUnit.repository, is(notNullValue()))
         // Simpler with groovy
-        null != context.repository
-        context.repository.isEmpty()
+        null != contextUnit.repository
+        contextUnit.repository.isEmpty()
 
     }
 
@@ -47,7 +48,7 @@ class ContextSpec extends Specification {
         setup:
 
         when:
-        ContextItem<Node<String>> entry = context.get('node')
+        ContextItem<Node<String>> entry = contextUnit.get('node')
 
         then:
         'node' == entry.id
@@ -55,7 +56,7 @@ class ContextSpec extends Specification {
 
         and: 'Same instance get delivered every call'
         when:
-        ContextItem<Node<String>> entry2 = context.get('node')
+        ContextItem<Node<String>> entry2 = contextUnit.get('node')
         then:
         'node' == entry2.id
         entry2.is(entry)
@@ -75,16 +76,16 @@ class ContextSpec extends Specification {
 
         if (exceptionType) {
             th = GroovyAssert.shouldFail exceptionType, {
-                result = context.put(input)
+                result = contextUnit.put(input)
             }
         } else {
-            result = context.put(input)
+            result = contextUnit.put(input)
         }
 
 
         then:
         expected == result
-        !result || context.repository.size() == 3
+        !result || contextUnit.repository.size() == 3
 
         where:
         title             | exceptionType         | input                                        | expected
@@ -107,16 +108,16 @@ class ContextSpec extends Specification {
 
         if (exceptionType) {
             th = GroovyAssert.shouldFail exceptionType, {
-                result = context.putContextValue(key, value)
+                result = contextUnit.putContextValue(key, value)
             }
         } else {
-            result = context.putContextValue(key, value)
+            result = contextUnit.putContextValue(key, value)
         }
 
 
         then:
         expected == result
-        !result || context.repository.size() == 3
+        !result || contextUnit.repository.size() == 3
 
         where:
         title          | exceptionType         | key   | value  | expected
@@ -130,18 +131,18 @@ class ContextSpec extends Specification {
     def "GetContextValue no readOnWrite "() {
 
         expect: 'Automatic type coherce'
-        'value' == context.getContextValue('key')
+        'value' == contextUnit.getContextValue('key')
 
         and:
         when: 'Invoked from other context'
-        Node<String> resultAsNode = context.getContextValue('node')
+        Node<String> resultAsNode = contextUnit.getContextValue('node')
 
         then:
         null != resultAsNode
 
         and: 'no cast needed '
         when:
-        BigInteger resultAsBI = context.getContextValue(1)
+        BigInteger resultAsBI = contextUnit.getContextValue(1)
 
         then:
         null != resultAsBI
@@ -150,12 +151,12 @@ class ContextSpec extends Specification {
         and:
         expect: 'Wrong usage implies ClassCastException'
         GroovyAssert.shouldFail ClassCastException, {
-            UUID uuid = context.getContextValue('key')
+            UUID uuid = contextUnit.getContextValue('key')
         }
 
         and: 'null check'
         when:
-        BigDecimal nullExpected = context.getContextValue('GE' + Math.random())
+        BigDecimal nullExpected = contextUnit.getContextValue('GE' + Math.random())
 
         then:
         null == nullExpected
@@ -164,23 +165,72 @@ class ContextSpec extends Specification {
 
     def "RemoveContextValue"() {
         expect: 'Automatic type coherce'
-        List<Serializable> keys = context.keys().asList()
+        List<Serializable> keys = contextUnit.keys().asList()
 
-        while(keys){
+        when: 'Removing each key'
+        while (keys) {
             Serializable key = keys.pop()
+            Object removed = contextUnit.removeContextValue(key)
+            assert !contextUnit.repository.values().contains(removed)
         }
+
+        then:
+        noExceptionThrown()
     }
 
-    def "GetContextValue1"() {
+    @Unroll
+    void "GetContextValue1 #title"() {
 
+        when:
+        if (null == contextUnit.getContextValue(key)) {
+            assert defaultVal == contextUnit.getContextValue(key, defaultVal)
+        } else {
+            assert contextUnit.getContextValue(key) == contextUnit.getContextValue(key, defaultVal)
+        }
+
+        then:
+        noExceptionThrown()
+
+        where:
+        title                | key                          | defaultVal
+        'existing key'       | 'key'                        | _
+        'existing key node'  | 'node'                       | _
+        'existing key 1'     | 'node'                       | _
+        'NOT existing key 1' | UUID.randomUUID().toString() | 'demo'
     }
 
     def "Extend"() {
+        setup: 'Given a context'
+        Context extensor = new Context([
+                asContextItem('key1', 'value11'),
+                asContextItem('key2', 'value12'),
+                asContextItem('key3', 'value13'),
+        ])
 
+        when:
+        Context returned = contextUnit.extend(extensor)
+
+        then:
+        null != returned
+        returned.is(contextUnit)
+        contextUnit.keys() == ['key', 'key1', 'key2', 'key3', 'node', 1].toSet()
     }
 
     def "ExtendACopy"() {
+        setup: 'Given a context'
+        Context extensor = new Context([
+                asContextItem('key1', 'value11'),
+                asContextItem('key2', 'value12'),
+                asContextItem('key3', 'value13'),
+        ])
 
+        when:
+        Context returned = contextUnit.extendACopy(extensor)
+
+        then:
+        null != returned
+        !returned.is(contextUnit)
+        returned.keys() == ['key', 'key1', 'key2', 'key3', 'node', 1].toSet()
     }
 
     /// Tooling

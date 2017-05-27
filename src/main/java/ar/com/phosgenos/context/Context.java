@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Context {
@@ -18,6 +19,15 @@ public class Context {
     public Context(final Map<Serializable, ContextItem> _repository) {
         this.repository = new LinkedHashMap<>(
                 Objects.requireNonNull(_repository, "Context should be initialized with non null Map")
+        );
+    }
+
+    public Context(final Collection<ContextItem> _items) {
+        this(
+                Objects.requireNonNull(_items, "Context should be initialized with non null Collection of item context")
+                        .stream()
+                        .filter(contextItem -> null != contextItem.getData())
+                        .collect(Collectors.toMap(ContextItem::getId, item -> item))
         );
     }
 
@@ -83,11 +93,11 @@ public class Context {
     }
 
     public Context extendACopy(Context toCopy) {
-        Context copy = new Context(toCopy != null ? toCopy.repository : new HashMap<>());
+        Context copy = new Context(this);
         return copy.extend(toCopy);
     }
 
-    private <V> ContextItem<V> asContextItem(Serializable key, V defaultValue) {
+    public static final <V> ContextItem<V> asContextItem(Serializable key, V defaultValue) {
         return new ContextItem.ContextItemBuilder<V>()
                 .id(key)
                 .data(defaultValue)
