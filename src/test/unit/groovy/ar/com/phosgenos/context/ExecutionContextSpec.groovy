@@ -1,5 +1,6 @@
 package ar.com.phosgenos.context
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
@@ -10,55 +11,16 @@ class ExecutionContextSpec extends Specification {
 
     static final UUID_KEY = 'uuid_key'
 
-    class FirstLevelWorker implements Runnable {
-        private final String name
-        private final CountDownLatch latch
-
-        FirstLevelWorker(String _name, CountDownLatch _latch) {
-            this.name = _name
-            this.latch = _latch
-        }
-
-        @Override
-        void run() {
-            ExecutionContext.put(UUID_KEY, UUID.randomUUID().toString())
-            println(name + 'has id' + ExecutionContext.currentContext.get(UUID_KEY))
-            SecondLevelWorker subWorker = new SecondLevelWorker("sub" + name, ExecutionContext.get(UUID_KEY) as String)
-            Thread subWorkerThread = new Thread(subWorker)
-            subWorkerThread.start()
-            try {
-                subWorkerThread.join()
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt()
-            }
-            ExecutionContext.currentContext.finalize()
-            latch.countDown()
-        }
-    }
-
-    class SecondLevelWorker implements Runnable {
-        private final String name
-        private final String parentuuid
-
-        SecondLevelWorker(String name, String parentuuid) {
-            this.name = name
-            this.parentuuid = parentuuid
-        }
-
-        @Override
-        void run() {
-            assert parentuuid == ExecutionContext.get(UUID_KEY)
-        }
-    }
-
     def "multithread"() {
         setup:
-        List<String> names = ['worker1', 'worker2']
+        List<String> names = (1..8).collect { "worker$it" }
         CountDownLatch latch = new CountDownLatch(names.size())
-        ExecutorService taskExecutor = Executors.newFixedThreadPool(4)
+        ExecutorService taskExecutor = Executors.newFixedThreadPool(2)
+        Collection<FirstLevelWorker> workers = []
 
         when:
-        names.each { taskExecutor.execute(new FirstLevelWorker(it, latch)) }
+        workers += names.collect { new FirstLevelWorker(it, latch) }
+                .each { taskExecutor.execute(it) }
 
         try {
             latch.await()
@@ -70,4 +32,16 @@ class ExecutionContextSpec extends Specification {
         noExceptionThrown()
 
     }
+
+    @Ignore
+    def "consistency"() {
+        setup:
+        UUID uid = UUID.randomUUID()
+        String identifier = uid.toString()
+
+        expect:
+        ExecutionContext.put(identifier, UUID) == ExecutionContext.get(identifier)
+    }
+
+
 }

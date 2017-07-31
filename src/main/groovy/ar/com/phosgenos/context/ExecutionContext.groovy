@@ -59,30 +59,30 @@ class ExecutionContext {
     }
 
     static <T> T put(final String key, final T payload) {
-        getCurrentContext().context.putContextValue(key, payload)
+        return currentContext.context.putContextValue(key, payload)
     }
 
-    static <T> T readOnWrite(final String key, final T payload) {
-        getCurrentContext().context.getContextValue(key, payload)
+    static <T> T get(final String key, final T payload) {
+        currentContext.context.getContextValue(key, payload)
     }
 
     static <T> T get(final String key) {
-        getCurrentContext().context.getContextValue(key)
+        return currentContext.context.getContextValue(key)
     }
 
     static <T> T remove(final String key) {
-        getCurrentContext().context.removeContextValue(key)
+        currentContext.context.removeContextValue(key)
     }
 
     static Set<String> contextKeys() {
-        return getCurrentContext().context.repository.keySet()
+        return currentContext.context.repository.keySet()
     }
 
-    void printContextToDebug() {
+    static void printExecutionContext() {
         StringBuilder result = new StringBuilder()
         result << 'For Thread ' << Thread.currentThread().getName() << ':\n'
         contextKeys().each { String key ->
-            Object val = getCurrentContext().context.getContextValue(key)
+            Object val = currentContext.context.getContextValue(key)
             result << "${key}->${val}\n"
         }
         log.info(result.toString())

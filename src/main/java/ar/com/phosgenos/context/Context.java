@@ -78,7 +78,8 @@ public class Context {
 
     public <V> V getContextValue(final Serializable key) {
         ContextItem<V> value = get(key);
-        return (value == null) ? null : value.getData();
+        V returnedValue = (value == null) ? null : value.getData();
+        return returnedValue;
     }
 
     public <V> V getContextValue(final Serializable key, final V defaultValue) {
