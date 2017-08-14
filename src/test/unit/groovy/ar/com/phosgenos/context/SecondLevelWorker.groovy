@@ -14,6 +14,7 @@ class SecondLevelWorker implements Runnable {
     @Override
     void run() {
         ExecutionContext.printExecutionContext()
+        String
         println( ExecutionContext.get(UUID_KEY) )
         assert parentuuid == ExecutionContext.get(UUID_KEY)
     }

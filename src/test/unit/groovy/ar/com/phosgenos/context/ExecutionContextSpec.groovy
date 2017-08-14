@@ -13,7 +13,7 @@ class ExecutionContextSpec extends Specification {
 
     def "multithread"() {
         setup:
-        List<String> names = (1..8).collect { "worker$it" }
+        List<String> names = (1..2).collect { "worker$it" }
         CountDownLatch latch = new CountDownLatch(names.size())
         ExecutorService taskExecutor = Executors.newFixedThreadPool(2)
         Collection<FirstLevelWorker> workers = []
@@ -33,14 +33,17 @@ class ExecutionContextSpec extends Specification {
 
     }
 
-    @Ignore
     def "consistency"() {
         setup:
         UUID uid = UUID.randomUUID()
         String identifier = uid.toString()
 
-        expect:
-        ExecutionContext.put(identifier, UUID) == ExecutionContext.get(identifier)
+        when:
+        ExecutionContext.put(identifier, uid)
+
+        then:
+        uid.equals( ExecutionContext.get(identifier) )
+        uid.is(ExecutionContext.get(identifier))
     }
 
 

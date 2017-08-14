@@ -83,7 +83,7 @@ class ExecutionContext {
         result << 'For Thread ' << Thread.currentThread().getName() << ':\n'
         contextKeys().each { String key ->
             Object val = currentContext.context.getContextValue(key)
-            result << "${key}->${val}\n"
+            result << "\t${key}->${val}\n"
         }
         log.info(result.toString())
     }
