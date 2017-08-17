@@ -1,6 +1,5 @@
 package ar.com.phosgenos.context
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
@@ -13,7 +12,7 @@ class ExecutionContextSpec extends Specification {
 
     def "multithread"() {
         setup:
-        List<String> names = (1..2).collect { "worker$it" }
+        List<String> names = (1..8).collect { "worker$it" }
         CountDownLatch latch = new CountDownLatch(names.size())
         ExecutorService taskExecutor = Executors.newFixedThreadPool(2)
         Collection<FirstLevelWorker> workers = []
@@ -42,7 +41,7 @@ class ExecutionContextSpec extends Specification {
         ExecutionContext.put(identifier, uid)
 
         then:
-        uid.equals( ExecutionContext.get(identifier) )
+        uid == ExecutionContext.get(identifier)
         uid.is(ExecutionContext.get(identifier))
     }
 

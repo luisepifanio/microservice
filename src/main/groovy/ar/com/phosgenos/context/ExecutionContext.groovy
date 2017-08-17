@@ -17,15 +17,22 @@ class ExecutionContext {
 
         @Override
         protected ExecutionContext childValue(ExecutionContext executionContext) {
-
+            // This process probably is not most reliable but tries to isolate
+            // thread execution context
             Map<Serializable, ContextItem> repoCopy = executionContext.context.repository.collectEntries {
                 final Serializable key, final ContextItem value ->
                     final Serializable newKey = SerializationUtils.clone(key)
-                    ContextItem item = new ContextItem(SerializationUtils.clone(key), (value instanceof Serializable) ? SerializationUtils.clone(value) : value)
+                    ContextItem item = new ContextItem.ContextItemBuilder()
+                            .id(newKey)
+                            .data((value.data instanceof Serializable) ? SerializationUtils.clone(value.data) : value.data)
+                            .build()
                     [(newKey): item]
             }
 
             ExecutionContext childContext = new ExecutionContext(new Context(repoCopy))
+
+            // log.info(['childValue:', childContext.toString()].join('\n'))
+
             return childContext
         }
     }
@@ -80,11 +87,9 @@ class ExecutionContext {
 
     static void printExecutionContext() {
         StringBuilder result = new StringBuilder()
+        result << '\n' << 'EXECUTION CONTEXT ' << ':\n'
         result << 'For Thread ' << Thread.currentThread().getName() << ':\n'
-        contextKeys().each { String key ->
-            Object val = currentContext.context.getContextValue(key)
-            result << "\t${key}->${val}\n"
-        }
+        result << currentContext.context.toString()
         log.info(result.toString())
     }
 
@@ -93,4 +98,8 @@ class ExecutionContext {
         sharedContext.remove()
     }
 
+    @Override
+    public String toString() {
+        return context.toString()
+    }
 }

@@ -112,4 +112,13 @@ public class Context {
     public int size() {
         return repository.size();
     }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        for (Map.Entry<Serializable, ContextItem> entry : repository.entrySet()) {
+            buffer.append( entry.getKey() + "=>" + entry.getValue() );
+        }
+        return buffer.toString();
+    }
 }
